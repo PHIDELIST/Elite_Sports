@@ -6,7 +6,8 @@ from aws_cdk import (
     aws_cognito as cognito,
     aws_apigatewayv2 as apigwv2,
     aws_apigatewayv2_integrations as integrations,
-    core
+    CfnOutput,
+    RemovalPolicy
 )
 from constructs import Construct
 
@@ -17,28 +18,28 @@ class EliteSportsBackendStack(Stack):
 
         # DynamoDB Table
         table = dynamodb.Table(self, "EliteSportsItems",
-                               partition_key=dynamodb.Attribute(name="itemId", type=dynamodb.AttributeType.STRING),
-                               removal_policy=core.RemovalPolicy.DESTROY)
+                               partition_key=dynamodb.Attribute(name="Id", type=dynamodb.AttributeType.STRING),
+                               removal_policy=RemovalPolicy.DESTROY)
 
         # Lambda Functions
         create_lambda = _lambda.Function(self, "CreateFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="create.handler",
+                                         handler="lambda.create.handler",
                                          code=_lambda.Code.from_asset("lambda"))
 
         read_lambda = _lambda.Function(self, "ReadFunction",
                                        runtime=_lambda.Runtime.PYTHON_3_8,
-                                       handler="read.handler",
+                                       handler="lambda.read.handler",
                                        code=_lambda.Code.from_asset("lambda"))
 
         update_lambda = _lambda.Function(self, "UpdateFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="update.handler",
+                                         handler="lambda.update.handler",
                                          code=_lambda.Code.from_asset("lambda"))
 
         delete_lambda = _lambda.Function(self, "DeleteFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="delete.handler",
+                                         handler="lambda.delete.handler",
                                          code=_lambda.Code.from_asset("lambda"))
 
         # API Gateway
@@ -73,4 +74,4 @@ class EliteSportsBackendStack(Stack):
         single_item_resource.add_method("DELETE", delete_integration, authorizer=authorizer)
 
         # Output the API Gateway endpoint
-        core.CfnOutput(self, "EliteSportsApiURL", value=api.url)
+        CfnOutput(self, "EliteSportsApiURL", value=api.url)
