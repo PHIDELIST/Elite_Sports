@@ -7,7 +7,8 @@ from aws_cdk import (
     aws_apigatewayv2 as apigwv2,
     aws_apigatewayv2_integrations as integrations,
     CfnOutput,
-    RemovalPolicy
+    RemovalPolicy,
+    aws_iam as iam
 )
 from constructs import Construct
 
@@ -44,6 +45,23 @@ class EliteSportsBackendStack(Stack):
                                          handler="lambda.delete.handler",
                                          code=_lambda.Code.from_asset("lambda"))
 
+                # Define IAM policy statement for DynamoDB access
+        dynamodb_policy_statement = iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=[
+                "dynamodb:PutItem",
+                "dynamodb:GetItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
+            ],
+            resources=[table.table_arn]  
+        )
+
+        # Attach IAM policy to each Lambda function's execution role
+        create_lambda.role.add_to_policy(dynamodb_policy_statement)
+        read_lambda.role.add_to_policy(dynamodb_policy_statement)
+        update_lambda.role.add_to_policy(dynamodb_policy_statement)
+        delete_lambda.role.add_to_policy(dynamodb_policy_statement)
         # API Gateway
         api = apigw.RestApi(self, "EliteSportsItemsApi",
                             default_cors_preflight_options={
