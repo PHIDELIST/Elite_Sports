@@ -27,23 +27,23 @@ class EliteSportsBackendStack(Stack):
         # Lambda Functions
         create_lambda = _lambda.Function(self, "CreateFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="lambda.create.handler",
-                                         code=_lambda.Code.from_asset("lambda"))
+                                         handler="create.handler",
+                                         code=_lambda.Code.from_asset("lambda/create"))
 
         read_lambda = _lambda.Function(self, "ReadFunction",
                                        runtime=_lambda.Runtime.PYTHON_3_8,
-                                       handler="lambda.read.handler",
-                                       code=_lambda.Code.from_asset("lambda"))
+                                       handler="read.handler",
+                                       code=_lambda.Code.from_asset("lambda/read"))
 
         update_lambda = _lambda.Function(self, "UpdateFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="lambda.update.handler",
-                                         code=_lambda.Code.from_asset("lambda"))
+                                         handler="update.handler",
+                                         code=_lambda.Code.from_asset("lambda/update"))
 
         delete_lambda = _lambda.Function(self, "DeleteFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
-                                         handler="lambda.delete.handler",
-                                         code=_lambda.Code.from_asset("lambda"))
+                                         handler="delete.handler",
+                                         code=_lambda.Code.from_asset("lambda/delete"))
 
                 # Define IAM policy statement for DynamoDB access
         dynamodb_policy_statement = iam.PolicyStatement(
@@ -67,7 +67,8 @@ class EliteSportsBackendStack(Stack):
                             default_cors_preflight_options={
                                 "allow_origins": apigw.Cors.ALL_ORIGINS,
                                 "allow_methods": apigw.Cors.ALL_METHODS
-                            })
+                            },
+                           api_key_source_type=None,)
 
         items_resource = api.root.add_resource("items")
         single_item_resource = items_resource.add_resource("{id}")
@@ -78,8 +79,8 @@ class EliteSportsBackendStack(Stack):
                                      user_verification=cognito.UserVerificationConfig(email_subject="Verify your email"))
 
         # API Gateway Authorizer
-        authorizer = apigw.CognitoUserPoolsAuthorizer(self, "EliteSportsAuthorizer",
-                                                      cognito_user_pools=[user_pool])
+        # authorizer = apigw.CognitoUserPoolsAuthorizer(self, "EliteSportsAuthorizer",
+        #                                               cognito_user_pools=[user_pool])
 
         # Integration for Lambda Functions
         create_integration = apigw.LambdaIntegration(create_lambda)
@@ -88,10 +89,10 @@ class EliteSportsBackendStack(Stack):
         delete_integration = apigw.LambdaIntegration(delete_lambda)
 
         # Add Methods with Authorizer
-        items_resource.add_method("POST", create_integration, authorizer=authorizer)
-        single_item_resource.add_method("GET", read_integration, authorizer=authorizer)
-        single_item_resource.add_method("PUT", update_integration, authorizer=authorizer)
-        single_item_resource.add_method("DELETE", delete_integration, authorizer=authorizer)
+        items_resource.add_method("POST", create_integration)
+        single_item_resource.add_method("GET", read_integration)
+        single_item_resource.add_method("PUT", update_integration)
+        single_item_resource.add_method("DELETE", delete_integration)
 
         # Output the API Gateway endpoint
         CfnOutput(self, "EliteSportsApiURL", value=api.url)
