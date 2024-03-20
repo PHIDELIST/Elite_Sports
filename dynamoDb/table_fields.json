@@ -1,0 +1,39 @@
+{
+    "reservationId": {
+      "name": "reservationId",
+      "type": "STRING"
+    },
+    "userId": {
+      "name": "userId",
+      "type": "STRING"
+    },
+    "fieldName": {
+      "name": "fieldName",
+      "type": "STRING"
+    },
+    "reservationDate": {
+      "name": "reservationDate",
+      "type": "STRING"
+    },
+    "startTime": {
+      "name": "startTime",
+      "type": "STRING"
+    },
+    "endTime": {
+      "name": "endTime",
+      "type": "STRING"
+    },
+    "status": {
+      "name": "status",
+      "type": "STRING"
+    },
+    "createdAt": {
+      "name": "createdAt",
+      "type": "STRING"
+    },
+    "updatedAt": {
+      "name": "updatedAt",
+      "type": "STRING"
+    }
+  }
+  
