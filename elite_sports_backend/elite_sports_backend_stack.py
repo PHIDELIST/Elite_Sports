@@ -10,31 +10,19 @@ from aws_cdk import (
     RemovalPolicy
 )
 from constructs import Construct
-import json
-import os
-parent_directory = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+
+
 class EliteSportsBackendStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # Load table fields from JSON file
-        json_file_path = os.path.join(parent_directory,"dynamoDb" "table_fields.json")
-        with open(json_file_path, "r") as file:
-            table_fields = json.load(file)
         # DynamoDB Table
         table = dynamodb.Table(self, "EliteSportsReservations",
-                            partition_key=dynamodb.Attribute(name=table_fields["reservationId"]["name"], 
-                                                                type=dynamodb.AttributeType[table_fields["reservationId"]["type"]]),
+                            partition_key=dynamodb.Attribute(name="reservationId", 
+                                                                type=dynamodb.AttributeType.STRING),
                             removal_policy=RemovalPolicy.DESTROY)
 
-        for field_name, field_info in table_fields.items():
-            if field_name != "reservationId":  # Skip partition key
-                table.add_attribute(
-                    name=field_info["name"],
-                    type=dynamodb.AttributeType[field_info["type"]]
-                )
-        
         # Lambda Functions
         create_lambda = _lambda.Function(self, "CreateFunction",
                                          runtime=_lambda.Runtime.PYTHON_3_8,
