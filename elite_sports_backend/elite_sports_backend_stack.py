@@ -52,9 +52,10 @@ class EliteSportsBackendStack(Stack):
                 "dynamodb:PutItem",
                 "dynamodb:GetItem",
                 "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
+                "dynamodb:DeleteItem",
+                "dynamodb:Scan" 
             ],
-            resources=[table.table_arn]  
+            resources=["arn:aws:dynamodb:us-east-1:576997243977:table/EliteSportsBackendStack-EliteSportsReservationsC8306AFB-1M6P8PB0JPIF9"]  
         )
 
         # Attach IAM policy to each Lambda function's execution role
@@ -67,8 +68,7 @@ class EliteSportsBackendStack(Stack):
                             default_cors_preflight_options={
                                 "allow_origins": apigw.Cors.ALL_ORIGINS,
                                 "allow_methods": apigw.Cors.ALL_METHODS
-                            },
-                           api_key_source_type=None,)
+                            })
 
         items_resource = api.root.add_resource("items")
         single_item_resource = items_resource.add_resource("{id}")
@@ -89,10 +89,10 @@ class EliteSportsBackendStack(Stack):
         delete_integration = apigw.LambdaIntegration(delete_lambda)
 
         # Add Methods with Authorizer
-        items_resource.add_method("POST", create_integration)
-        single_item_resource.add_method("GET", read_integration)
-        single_item_resource.add_method("PUT", update_integration)
-        single_item_resource.add_method("DELETE", delete_integration)
+        items_resource.add_method("POST", create_integration,api_key_required=False)
+        single_item_resource.add_method("GET", read_integration,api_key_required=False)
+        single_item_resource.add_method("PUT", update_integration,api_key_required=False)
+        single_item_resource.add_method("DELETE", delete_integration,api_key_required=False)
 
         # Output the API Gateway endpoint
         CfnOutput(self, "EliteSportsApiURL", value=api.url)
