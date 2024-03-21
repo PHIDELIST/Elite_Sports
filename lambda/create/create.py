@@ -3,7 +3,7 @@ import boto3
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-1M6P8PB0JPIF9')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-Q38RWIYEEDAV')
 
 def handler(event, context):
     reservation = json.loads(event['body'])

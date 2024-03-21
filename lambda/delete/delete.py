@@ -2,7 +2,7 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsReservations')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-Q38RWIYEEDAV')
 
 def handler(event, context):
     reservation_id = event['pathParameters']['id']

@@ -9,7 +9,7 @@ def handler(event, context):
     
    
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-NQUZVN5X308P')
+    table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-Q38RWIYEEDAV')
     table.put_item(Item={'userId': user_id, 'email': email})
     
     return {

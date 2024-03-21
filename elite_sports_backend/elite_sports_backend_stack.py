@@ -85,7 +85,8 @@ class EliteSportsBackendStack(Stack):
         user_pool = cognito.UserPool(self, "EliteSportsUserPool",
                                      self_sign_up_enabled=True,
                                      user_verification=cognito.UserVerificationConfig(email_subject="Verify your email"),
-                                     sign_in_aliases=cognito.SignInAliases(email=True))
+                                     sign_in_aliases=cognito.SignInAliases(email=True),
+                                     removal_policy=RemovalPolicy.DESTROY)
 
         # post confirmation trigger
         user_pool.add_trigger(
