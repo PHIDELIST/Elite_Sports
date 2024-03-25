@@ -2,7 +2,7 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-1M6P8PB0JPIF9')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-Q38RWIYEEDAV')
 
 def handler(event, context):
     response = table.scan()

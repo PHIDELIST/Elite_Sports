@@ -44,6 +44,13 @@ class EliteSportsBackendStack(Stack):
                                          runtime=_lambda.Runtime.PYTHON_3_8,
                                          handler="delete.handler",
                                          code=_lambda.Code.from_asset("lambda/delete"))
+        
+        # Lambda Function for Cognito Post Confirmation Trigger
+        post_confirmation_lambda = _lambda.Function(self, "PostConfirmationLambda",
+                                              runtime=_lambda.Runtime.PYTHON_3_8,
+                                              handler="post_confirmation_lambda.handler",
+                                              code=_lambda.Code.from_asset("lambda/post_signup"))
+
 
                 # Define IAM policy statement for DynamoDB access
         dynamodb_policy_statement = iam.PolicyStatement(
@@ -55,7 +62,7 @@ class EliteSportsBackendStack(Stack):
                 "dynamodb:DeleteItem",
                 "dynamodb:Scan" 
             ],
-            resources=["arn:aws:dynamodb:us-east-1:576997243977:table/EliteSportsBackendStack-EliteSportsReservationsC8306AFB-1M6P8PB0JPIF9"]  
+            resources=["*"]  
         )
 
         # Attach IAM policy to each Lambda function's execution role
@@ -63,6 +70,7 @@ class EliteSportsBackendStack(Stack):
         read_lambda.role.add_to_policy(dynamodb_policy_statement)
         update_lambda.role.add_to_policy(dynamodb_policy_statement)
         delete_lambda.role.add_to_policy(dynamodb_policy_statement)
+        post_confirmation_lambda.add_to_role_policy(dynamodb_policy_statement)
         # API Gateway
         api = apigw.RestApi(self, "EliteSportsItemsApi",
                             default_cors_preflight_options={
@@ -76,7 +84,15 @@ class EliteSportsBackendStack(Stack):
         # Cognito User Pool
         user_pool = cognito.UserPool(self, "EliteSportsUserPool",
                                      self_sign_up_enabled=True,
-                                     user_verification=cognito.UserVerificationConfig(email_subject="Verify your email"))
+                                     user_verification=cognito.UserVerificationConfig(email_subject="Verify your email"),
+                                     sign_in_aliases=cognito.SignInAliases(email=True),
+                                     removal_policy=RemovalPolicy.DESTROY)
+
+        # post confirmation trigger
+        user_pool.add_trigger(
+            operation=cognito.UserPoolOperation.POST_CONFIRMATION,
+            fn= post_confirmation_lambda
+        )
 
         # API Gateway Authorizer
         # authorizer = apigw.CognitoUserPoolsAuthorizer(self, "EliteSportsAuthorizer",
