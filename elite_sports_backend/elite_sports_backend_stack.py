@@ -87,6 +87,13 @@ class EliteSportsBackendStack(Stack):
                                      user_verification=cognito.UserVerificationConfig(email_subject="Verify your email"),
                                      sign_in_aliases=cognito.SignInAliases(email=True),
                                      removal_policy=RemovalPolicy.DESTROY)
+        
+        user_pool_client = cognito.UserPoolClient(self, "EliteSportsUserPoolClient",
+                                                   user_pool=user_pool,
+                                                   auth_flows={
+                                                       "user_password": True,
+                                                       "user_srp": True
+                                                   })
 
         # post confirmation trigger
         user_pool.add_trigger(
@@ -112,3 +119,6 @@ class EliteSportsBackendStack(Stack):
 
         # Output the API Gateway endpoint
         CfnOutput(self, "EliteSportsApiURL", value=api.url)
+        CfnOutput(self, "UserPoolId", value=user_pool.user_pool_id)
+        CfnOutput(self, "UserPoolClientId", value=user_pool_client.user_pool_client_id)
+
