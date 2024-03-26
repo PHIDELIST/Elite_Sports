@@ -24,9 +24,10 @@ function LoginPage() {
     
     try {
       const user = await Auth.signIn(email, password);
-      const token = user.Session;
+
+      const token = user.signInUserSession.accessToken.jwtToken;
       const userID = user.username;
-      const name = user.username;  
+      const name = user.signInUserSession.idToken.payload.name;  
       localStorage.setItem('token', token);
       localStorage.setItem('userID', userID);
       localStorage.setItem('name', name);
