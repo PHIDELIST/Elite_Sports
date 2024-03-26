@@ -1,15 +1,11 @@
 import './LoginPage.css';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Auth } from "aws-amplify";
 
 
-function LoginPage() {
-  const navigate = useNavigate();
-
-  
+function LoginPage() {  
   const schema = yup.object().shape({
     email: yup.string().email().required('Email is required'),
     password: yup.string().required('Password is required')
@@ -31,8 +27,7 @@ function LoginPage() {
       localStorage.setItem('token', token);
       localStorage.setItem('userID', userID);
       localStorage.setItem('name', name);
-
-      navigate('/');
+      window.location.href = "/"
     } catch (error) {
       alert(error.message);
       console.log('Error:', error);

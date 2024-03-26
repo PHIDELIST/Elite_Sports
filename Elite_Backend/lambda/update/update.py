@@ -16,7 +16,14 @@ def handler(event, context):
         ExpressionAttributeValues={':val1': reservation['fieldName'], ':val2': reservation['startTime'], ':val3': reservation['endTime'], ':val4': reservation['status'], ':val5': reservation['updatedAt']},
         ReturnValues='UPDATED_NEW'
     )
+    headers = {
+        'Access-Control-Allow-Origin': '*',  
+        'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+    }
+    
     return {
         'statusCode': 200,
+        'headers': headers,
         'body': json.dumps('Reservation updated successfully')
     }

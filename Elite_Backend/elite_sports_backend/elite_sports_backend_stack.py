@@ -8,7 +8,9 @@ from aws_cdk import (
     aws_apigatewayv2_integrations as integrations,
     CfnOutput,
     RemovalPolicy,
-    aws_iam as iam
+    aws_iam as iam,
+    aws_s3 as s3,
+    aws_cloudfront as cloudfront,
 )
 from constructs import Construct
 
@@ -71,15 +73,21 @@ class EliteSportsBackendStack(Stack):
         update_lambda.role.add_to_policy(dynamodb_policy_statement)
         delete_lambda.role.add_to_policy(dynamodb_policy_statement)
         post_confirmation_lambda.add_to_role_policy(dynamodb_policy_statement)
+
         # API Gateway
-        api = apigw.RestApi(self, "EliteSportsItemsApi",
-                            default_cors_preflight_options={
-                                "allow_origins": apigw.Cors.ALL_ORIGINS,
-                                "allow_methods": apigw.Cors.ALL_METHODS
-                            })
+        api = apigw.RestApi(
+            self, "EliteSportsItemsApi",
+            default_cors_preflight_options={
+                "allow_origins": ["*"],
+                "allow_methods": apigw.Cors.ALL_METHODS,
+                "allow_headers": ["*"] 
+            }
+        )
+
 
         items_resource = api.root.add_resource("items")
         single_item_resource = items_resource.add_resource("{id}")
+        
 
         # Cognito User Pool
         user_pool = cognito.UserPool(self, "EliteSportsUserPool",
@@ -113,11 +121,41 @@ class EliteSportsBackendStack(Stack):
 
         # Add Methods with Authorizer
         items_resource.add_method("POST", create_integration,api_key_required=False)
-        single_item_resource.add_method("GET", read_integration,api_key_required=False)
+        items_resource.add_method("GET", read_integration,api_key_required=False)
         single_item_resource.add_method("PUT", update_integration,api_key_required=False)
         single_item_resource.add_method("DELETE", delete_integration,api_key_required=False)
+         
+        # S3 Bucket for Website Hosting
+        frontend_bucket = s3.Bucket(self, "EliteSportsWebsiteBucket254",
+                                   website_index_document="index.html",
+                                   removal_policy=RemovalPolicy.DESTROY)
+        
+        # Allow CloudFront to access the S3 bucket
+        frontend_bucket.add_to_resource_policy(iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=["s3:GetObject"],
+            resources=[frontend_bucket.arn_for_objects("*")],
+            principals=[iam.ServicePrincipal("cloudfront.amazonaws.com")],
+        ))
 
-        # Output the API Gateway endpoint
+        # CloudFront Distribution
+        cloudfront_distribution = cloudfront.CloudFrontWebDistribution(self, "WebsiteDistribution",
+            origin_configs=[
+                cloudfront.SourceConfiguration(
+                    s3_origin_source=cloudfront.S3OriginConfig(
+                        s3_bucket_source=frontend_bucket,
+                        origin_access_identity=cloudfront.OriginAccessIdentity(self, 'OAI')
+                    ),
+                    behaviors=[
+                        cloudfront.Behavior(is_default_behavior=True)
+                    ]
+                )
+            ]
+        )
+
+       
+         # Outputs
+        CfnOutput(self, "WebsiteURL", value=cloudfront_distribution.distribution_domain_name)
         CfnOutput(self, "EliteSportsApiURL", value=api.url)
         CfnOutput(self, "UserPoolId", value=user_pool.user_pool_id)
         CfnOutput(self, "UserPoolClientId", value=user_pool_client.user_pool_client_id)

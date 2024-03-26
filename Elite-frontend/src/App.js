@@ -17,12 +17,12 @@ Amplify.configure({
   }
 });
 function App() {
-  const user = localStorage.getItem('userID');
+  const token = localStorage.getItem('userID');
   return (
     <Router>
       <div className="App">        
         <Routes>
-          <Route exact path="/" element={user? <LandingPage /> : <LoginPage />} />
+          <Route exact path="/" element={token? <LandingPage /> : <LoginPage />} />
           <Route path="/fields" element={<FieldsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path='/confirm' element={<ConfirmationPage />} />
