@@ -20,9 +20,9 @@ class EliteSportsBackendStack(Stack):
 
         # DynamoDB Table
         table = dynamodb.Table(self, "EliteSportsReservations",
-                            partition_key=dynamodb.Attribute(name="reservationId", 
-                                                                type=dynamodb.AttributeType.STRING),
-                            removal_policy=RemovalPolicy.DESTROY)
+            partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING),
+            removal_policy=RemovalPolicy.DESTROY)
+
 
         # Lambda Functions
         create_lambda = _lambda.Function(self, "CreateFunction",

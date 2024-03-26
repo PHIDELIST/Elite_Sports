@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { signUp } from '@aws-amplify/auth'; 
+import { Auth } from "aws-amplify";
 
 
 function SignUp() {
@@ -31,7 +31,7 @@ function SignUp() {
       }
 
       // AWS Cognito Auth.signUp method 
-      await signUp({
+      await Auth.signUp({
         username: requestData.email, 
         password: requestData.password,
         attributes: {

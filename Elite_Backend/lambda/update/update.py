@@ -3,7 +3,7 @@ import boto3
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsReservations')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-DCB2YB4NI3ZL')
 
 def handler(event, context):
     reservation_id = event['pathParameters']['id']

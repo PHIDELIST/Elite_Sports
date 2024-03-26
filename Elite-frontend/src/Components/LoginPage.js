@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {signIn } from '@aws-amplify/auth'; 
+import { Auth } from "aws-amplify";
 
 
 function LoginPage() {
@@ -23,7 +23,7 @@ function LoginPage() {
     const { email, password } = data;
     
     try {
-      const user = await signIn(email, password);
+      const user = await Auth.signIn(email, password);
       const token = user.Session;
       const userID = user.username;
       const name = user.username;  

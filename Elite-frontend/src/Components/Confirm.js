@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {resendSignUpCode,confirmSignUp} from "@aws-amplify/auth";
+import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import "./Confirm.css"; 
 
@@ -28,7 +28,7 @@ const navigate = useNavigate();
   const resend_code = async () => {
     setErrors("");
     try {
-      await resendSignUpCode(email);
+      await Auth.resendSignUp(email);
       console.log("Code resent successfully");
       setCodeSent(true);
     } catch (err) {
@@ -45,8 +45,8 @@ const navigate = useNavigate();
     event.preventDefault();
     setErrors("");
     try {
-      await confirmSignUp(email, code);
-      navigate("/signin");
+      await Auth.confirmSignUp(email, code);
+      navigate("/login");
     } catch (error) {
       setErrors(error.message);
     }
