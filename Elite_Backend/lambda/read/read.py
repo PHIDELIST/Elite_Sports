@@ -3,7 +3,7 @@ import boto3
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-DCB2YB4NI3ZL')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-18XG56950EF4O')
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):

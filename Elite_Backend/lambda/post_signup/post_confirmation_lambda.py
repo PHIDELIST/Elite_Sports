@@ -8,7 +8,7 @@ def handler(event, context):
         user_id = event['userName']
 
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-DCB2YB4NI3ZL')
+        table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-18XG56950EF4O')
         table.put_item(Item={'userId': user_id, 'email': email})
 
         return event

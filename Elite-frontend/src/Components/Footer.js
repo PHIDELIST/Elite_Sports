@@ -17,30 +17,30 @@ const Footer = () => {
       <div className="container">
         <div className="footer__header" >
           <div className="footer__header-left">
-            <a href="" className="navbar__brand">
-            <img alt="Elite Sports" src="./favicon.ico" />
-          Elite Sports
-        </a>
+            <span className="navbar__brand">
+              <img alt="Elite Sports" src="./favicon.ico" />
+              Elite Sports
+            </span>
             
             <p className="footer__description">
               Elite Sports is your premier destination for sports field rentals. Whether you're a professional athlete or a weekend warrior, we've got the perfect venue for your game.
             </p>
             <div className="footer__socmed-list">
-              <a href="" className="footer__socmed-link">
+              <span className="footer__socmed-link">
                 <img alt="Facebook" src={facebookIcon} className="footer__socmed-img" />
-              </a>
-              <a href="" className="footer__socmed-link">
+              </span>
+              <span className="footer__socmed-link">
                 <img alt="Twitter" src={twitterIcon} className="footer__socmed-img" />
-              </a>
-              <a href="" className="footer__socmed-link">
+              </span>
+              <span className="footer__socmed-link">
                 <img alt="Instagram" src={instagramIcon} className="footer__socmed-img" />
-              </a>
-              <a href="" className="footer__socmed-link">
+              </span>
+              <span className="footer__socmed-link">
                 <img alt="LinkedIn" src={linkedinIcon} className="footer__socmed-img" />
-              </a>
-              <a href="" className="footer__socmed-link">
+              </span>
+              <span className="footer__socmed-link">
                 <img alt="Youtube" src={youtubeIcon} className="footer__socmed-img" />
-              </a>
+              </span>
             </div>
           </div>
           <form action="" className="footer__header-right">
@@ -58,123 +58,119 @@ const Footer = () => {
                 <img alt="Email" src={emailIcon} />
               </label>
             </div>
-            <button className="footer__newsletter-button"  type="submit">
+            <button className="footer__newsletter-button" type="submit">
               Subscribe
             </button>
           </form>
         </div>
         <hr />
         <div className="footer__body">
-          <div class="footer__body-left" >
-            <div class="footer__menu-group">
-              <h3 class="footer__menu-title">Sport Fields</h3>
-              <div class="footer__menu-list">
-                <a href="" class="footer__menu-link">Futsal field</a>
-                <a href="" class="footer__menu-link">Badminton court</a>
-                <a href="" class="footer__menu-link">Tennis court</a>
-                <a href="" class="footer__menu-link"
-                  >Football field <span class="footer__menu-badge">New</span></a
-                >
-                <a href="" class="footer__menu-link">Billiard field</a>
-                <a href="" class="footer__menu-link"
-                  >Basketball court
-                  <span class="footer__menu-badge">New</span></a
-                >
-                <a href="" class="footer__menu-link">Hockey field</a>
-                <a href="" class="footer__menu-link">Golf course</a>
+          <div className="footer__body-left" >
+            <div className="footer__menu-group">
+              <h3 className="footer__menu-title">Sport Fields</h3>
+              <div className="footer__menu-list">
+                <span className="footer__menu-link">Futsal field</span>
+                <span className="footer__menu-link">Badminton court</span>
+                <span className="footer__menu-link">Tennis court</span>
+                <span className="footer__menu-link">Football field <span className="footer__menu-badge">New</span></span>
+                <span className="footer__menu-link">Billiard field</span>
+                <span className="footer__menu-link">Basketball court <span className="footer__menu-badge">New</span></span>
+                <span className="footer__menu-link">Hockey field</span>
+                <span className="footer__menu-link">Golf course</span>
               </div>
             </div>
-            <div class="footer__menu-group">
-              <h3 class="footer__menu-title">User</h3>
-              <div class="footer__menu-list">
-                <a href="" class="footer__menu-link">Sports arenas</a>
-                <a href="" class="footer__menu-link">Rental history</a>
-                <a href="" class="footer__menu-link">Sign in</a>
-                <a href="" class="footer__menu-link">Sign up</a>
-                <a href="" class="footer__menu-link">Email verification</a>
-                <a href="" class="footer__menu-link">Forgot password</a>
+            <div className="footer__menu-group">
+              <h3 className="footer__menu-title">User</h3>
+              <div className="footer__menu-list">
+                <span className="footer__menu-link">Sports arenas</span>
+                <span className="footer__menu-link">Rental history</span>
+                <span className="footer__menu-link">Sign in</span>
+                <span className="footer__menu-link">Sign up</span>
+                <span className="footer__menu-link">Email verification</span>
+                <span className="footer__menu-link">Forgot password</span>
               </div>
             </div>
-            <div class="footer__menu-group">
-              <h3 class="footer__menu-title">Partner</h3>
-              <div class="footer__menu-list">
-                <a href="" class="footer__menu-link">Sign in partner</a>
-                <a href="" class="footer__menu-link">Sign up partner</a>
-                <a href="" class="footer__menu-link">Email verification</a>
-                <a href="" class="footer__menu-link">Forgot password</a>
+            <div className="footer__menu-group">
+              <h3 className="footer__menu-title">Partner</h3>
+              <div className="footer__menu-list">
+                <span className="footer__menu-link">Sign in partner</span>
+                <span className="footer__menu-link">Sign up partner</span>
+                <span className="footer__menu-link">Email verification</span>
+                <span className="footer__menu-link">Forgot password</span>
               </div>
             </div>
-            <div class="footer__menu-group">
-              <h3 class="footer__menu-title">Company</h3>
-              <div class="footer__menu-list">
-                <a href="" class="footer__menu-link">About SportEase</a>
-                <a href="" class="footer__menu-link">Blog</a>
-                <a href="" class="footer__menu-link">FAQ</a>
-                <a href="" class="footer__menu-link">Contact</a>
-                <a href="" class="footer__menu-link">Sitemap</a>
+            <div className="footer__menu-group">
+              <h3 className="footer__menu-title">Company</h3>
+              <div className="footer__menu-list">
+                <span className="footer__menu-link">About SportEase</span>
+                <span className="footer__menu-link">Blog</span>
+                <span className="footer__menu-link">FAQ</span>
+                <span className="footer__menu-link">Contact</span>
+                <span className="footer__menu-link">Sitemap</span>
               </div>
             </div>
-            <div class="footer__menu-group">
-              <h3 class="footer__menu-title">Policy</h3>
-              <div class="footer__menu-list">
-                <a href="" class="footer__menu-link">Privacy policy</a>
-                <a href="" class="footer__menu-link">Terms of service</a>
-                <a href="" class="footer__menu-link">Disclaimer</a>
+            <div className="footer__menu-group">
+              <h3 className="footer__menu-title">Policy</h3>
+              <div className="footer__menu-list">
+                <span className="footer__menu-link">Privacy policy</span>
+                <span className="footer__menu-link">Terms of service</span>
+                <span className="footer__menu-link">Disclaimer</span>
               </div>
             </div>
           </div>
-          <div class="footer__body-right" >
-            <h3 class="footer__menu-title">Explore by city</h3>
-            <div class="footer__card-list">
-              <div class="footer__card-item">
+          <div className="footer__body-right" >
+            <h3 className="footer__menu-title">Explore by city</h3>
+            <div className="footer__card-list">
+              <div className="footer__card-item">
                 <img
                   alt=""
                   src={surabayaImage}
-                  class="footer__card-img"
+                  className="footer__card-img"
                 />
-                <div class="footer__card-body">
-                  <h4 class="footer__card-title">
-                    <a href="/fields">New York City, USA</a>
+                <div className="footer__card-body">
+                  <h4 className="footer__card-title">
+                    <span>New York City, USA</span>
                     <i><img alt="See" src={arrowRightIcon} /></i>
                   </h4>
-                  <p class="footer__card-description">
+                  <p className="footer__card-description">
                     Central Park: Enjoy a variety of sports activities including baseball, soccer, and volleyball in the heart of Manhattan.
-            </p>
+                  </p>
                 </div>
               </div>
-              <div class="footer__card-item" >
+              <div className="footer__card-item" >
                 <img
                   alt="Tokyo, Japan"
                   src={tokyoImage}
-                  class="footer__card-img"
+                  className="footer__card-img"
                 />
-                <div class="footer__card-body">
-                  <h4 class="footer__card-title">
-                    <a href="/fields">Tokyo, Japan</a>
+                <div className="footer__card-body">
+                  <h4 className="footer__card-title">
+                    <span>Tokyo, Japan</span>
                     <i><img alt="See" src={arrowRightIcon} /></i>
                   </h4>
-                  <p class="footer__card-description">
+                  <p className="footer__card-description">
                     Yoyogi Park: Engage in recreational sports like jogging, tennis, and cycling amidst serene greenery in Shibuya.
                   </p>
                 </div>
               </div>
-              <div class="footer__card-item" >
+              <div className="footer__card-item" >
                 <img
                   alt="Paris, France"
                   src={parisImage}
-                  class="footer__card-img"
+                  className="footer__card-img"
                 />
-                <div class="footer__card-body">
-                  <h4 class="footer__card-title">
-                    <a href="/fields">Paris, France</a>
+                <div className="footer__card-body">
+                  <h4 className="footer__card-title">
+                    <span>Paris, France</span>
                     <i><img alt="See" src={arrowRightIcon} /></i>
                   </h4>
-                  <p class="footer__card-description">
+                  <p className="footer__card-description">
                     Bois de Vincennes: Unwind in the largest public park in Paris, offering numerous fields for soccer, rugby, and cricket on the eastern edge of the city.
-            </p>
+                  </p>
                 </div>
               </div>
             </div>
+          </div>
         </div>
         <hr />
         <p className="footer__copyright">
@@ -182,9 +178,8 @@ const Footer = () => {
         </p>
       </div>
     </div>
-    </div>
-    
   );
 };
 
 export default Footer;
+

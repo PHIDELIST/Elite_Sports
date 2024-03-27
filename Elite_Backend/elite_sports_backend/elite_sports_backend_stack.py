@@ -24,7 +24,12 @@ class EliteSportsBackendStack(Stack):
         table = dynamodb.Table(self, "EliteSportsReservations",
             partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING),
             removal_policy=RemovalPolicy.DESTROY)
-
+        
+        # Add a Global Secondary Index on userId to facilitate querying by userId
+        table.add_global_secondary_index(
+            index_name="UserIdIndex",
+            partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING)
+        )
 
         # Lambda Functions
         create_lambda = _lambda.Function(self, "CreateFunction",

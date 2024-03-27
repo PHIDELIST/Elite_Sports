@@ -23,6 +23,7 @@ import lampGrayIcon from '../img/icons/lamp-gray.png';
 import magn from "../img/icons/magnifier.png"
 import clock from "../img/icons/clock-gray.png"
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   const [featuredFieldsData, setFeaturedFieldsData] = useState([]);
@@ -94,7 +95,7 @@ const LandingPage = () => {
 
 
 
- 
+
   const renderFeaturedFields = () => {
     return featuredFieldsData.map(field => (
       <div className="featured-fields__card" key={field.id}>
@@ -113,7 +114,7 @@ const LandingPage = () => {
             <p className="featured-fields__card-price">{field.price}</p>
           </div>
           <h3 className="featured-fields__card-name">
-            <a href="/fields">{field.name}</a>
+            <Link className="nav" to="/fields">{field.name}</Link>
           </h3>
           <p className="featured-fields__card-description">
             {field.description}
@@ -148,7 +149,7 @@ const LandingPage = () => {
             <p className="hero__subtitle">
               Elite Sports provides top-notch sports fields for rent, enabling you to elevate your game to new heights.
             </p>
-            <a href="/fields" className="hero__button">Get started</a>
+            <Link className="hero__button" to="/fields">Get started</Link>
           </div>
           <div className="hero__right">
             <div className="hero__img-group">
@@ -209,7 +210,7 @@ const LandingPage = () => {
         <div className="container featured-fields">
           <div className="featured-fields__header" >
             <h2>Featured fields</h2>
-            <a href="/fields">Browse all fields</a>
+            <Link className="h" to="/fields">Browse all fields</Link>
           </div>
           <div className="featured-fields__body">
             {renderFeaturedFields()}
@@ -248,7 +249,7 @@ const LandingPage = () => {
                 </p>
               </div>
             </div>
-            <a href="/fields" className="how__button">Explore fields</a>
+            <Link className="how__button" to="/fields">Explore fields</Link>
           </div>
         </div>
         <div className="promotion">
@@ -260,7 +261,7 @@ const LandingPage = () => {
               <p className="promotion__description">
                 At Elite Sports, we're committed to providing you with the ultimate field rental experience. Join us today and take your game to the next level!
               </p>
-              <a href="/fields" className="promotion__button">Explore fields</a>
+              <Link className="promotion__button" to="/fields">Explore fields</Link>
             </div>
             <div className="promotion__right">
               <img alt="Promotion" src={promotion1Img} className="promotion__img" />
@@ -275,18 +276,18 @@ const LandingPage = () => {
             <p className="join__description">
               Showcase your sports field to our community of passionate athletes. Join us as a partner today and start earning!
             </p>
-            <a href="/login" className="join__button join__button_primary">Join as a partner</a>
+            <Link className="join__button join__button_primary" to="/login">Join as a partner</Link>
           </div>
           <div className="join__card">
             <h2 className="join__title">Rent our field today</h2>
             <p className="join__description">
               Ready to play? Rent one of our premium sports fields and experience the thrill of the game like never before.
             </p>
-            <a href="/login" className="join__button">Join as a user</a>
+            <Link className="join__button" to="/login">Join as a user</Link>
           </div>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

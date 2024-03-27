@@ -3,7 +3,7 @@ import "./SignUp.css";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { Link } from 'react-router-dom'; 
 import { Auth } from "aws-amplify";
 
 
@@ -70,7 +70,7 @@ function SignUp() {
           {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           <button  type="submit">Sign Up</button>
           <p>
-            Already have an account? <a href="/login">Login</a>
+            Already have an account? <Link className="j" to="/login">Login</Link> 
           </p>
         </form>
       </div>

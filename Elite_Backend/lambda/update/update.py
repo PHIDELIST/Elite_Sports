@@ -3,17 +3,17 @@ import boto3
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-DCB2YB4NI3ZL')
+table = dynamodb.Table('EliteSportsBackendStack-EliteSportsReservationsC8306AFB-18XG56950EF4O')
 
 def handler(event, context):
     reservation_id = event['pathParameters']['id']
     reservation = json.loads(event['body'])
     reservation['updatedAt'] = datetime.now().isoformat()
     response = table.update_item(
-        Key={'reservationId': reservation_id},
-        UpdateExpression='SET #f = :val1, #s = :val2, #e = :val3, #st = :val4, #u = :val5',
-        ExpressionAttributeNames={'#f': 'fieldName', '#s': 'startTime', '#e': 'endTime', '#st': 'status', '#u': 'updatedAt'},
-        ExpressionAttributeValues={':val1': reservation['fieldName'], ':val2': reservation['startTime'], ':val3': reservation['endTime'], ':val4': reservation['status'], ':val5': reservation['updatedAt']},
+        Key={'id': reservation_id},  
+        UpdateExpression='SET #n = :val1, #l = :val2, #p = :val3, #d = :val4, #c = :val5, #s = :val6, #la = :val7, #u = :val8',
+        ExpressionAttributeNames={'#n': 'name', '#l': 'location', '#p': 'price', '#d': 'description', '#c': 'category', '#s': 'size', '#la': 'lamp', '#u': 'updatedAt'},
+        ExpressionAttributeValues={':val1': reservation['name'], ':val2': reservation['location'], ':val3': reservation['price'], ':val4': reservation['description'], ':val5': reservation['category'], ':val6': reservation['size'], ':val7': reservation['lamp'], ':val8': reservation['updatedAt']},
         ReturnValues='UPDATED_NEW'
     )
     headers = {

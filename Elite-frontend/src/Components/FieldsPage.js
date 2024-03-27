@@ -12,10 +12,13 @@ import cropGrayIcon from '../img/icons/crop-gray.png';
 import lampGrayIcon from '../img/icons/lamp-gray.png';
 import field1Img from '../img/fields/field-1.png';
 import field2Img from '../img/fields/field-2.png';
+import { Link } from 'react-router-dom';
 import "../css/style.css"
 
 const FieldsPage = () => {
   const [fields, setFields] = useState([]);
+  const [selectedField, setSelectedField] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +32,41 @@ const FieldsPage = () => {
 
     fetchData();
   }, []);
-  console.log(fields);
+  const openFieldModal = (field) => {
+    setSelectedField(field);
+
+  };
+
+  const closeFieldModal = () => {
+    setSelectedField(null);
+
+  };
+  
+  const handleSubmit = async () => {
+    try {
+      const updatedField = { ...selectedField, reserved: true };
+      const id = selectedField.id; 
+      
+      const response = await axios.put(
+        `https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items/${id}`,
+        updatedField,
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+          }
+        }
+      );
+      
+      alert('Reservation submitted successfully!');
+      closeFieldModal(); // Close modal after successful submission
+    } catch (error) {
+      console.error('Error submitting reservation:', error);
+      alert('Failed to submit reservation. Please try again later.');
+    }
+  };
+  
   return (
     <div>
       <Navbar />
@@ -88,10 +125,12 @@ const FieldsPage = () => {
               <div className="featured-fields__card" key={field.id}>
                 <div className="featured-fields__card-left">
                   <img alt="" src={field2Img} className="featured-fields__card-img" />
+                  <Link className="nav" to="/fields"></Link>
                   <button className="featured-fields__card-favorite" data-field-id={field.id}>
                     <img alt="Favorite" src={heartBlackIcon} />
                     <img alt="Favorite" src={heartSolidPrimaryIcon} />
                   </button>
+                  <button className="featured-fields__card-feature-item" onClick={() => { openFieldModal(field) }}><span>Reserve</span></button>
                 </div>
                 <div className="featured-fields__card-right">
                   <div className="featured-fields__card-top">
@@ -120,13 +159,31 @@ const FieldsPage = () => {
                       <img alt="Lamp" src={lampGrayIcon} />
                       <span>{field.lamp}</span>
                     </div>
+
                   </div>
                 </div>
+
               </div>
             ))}
           </div>
         </div>
       </main>
+      {selectedField && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={closeFieldModal}>&times;</span>
+            <h2>{selectedField.name}</h2>
+            <p>Location: {selectedField.location}</p>
+            <p>Price: {selectedField.price}</p>
+            <p>Description: {selectedField.description}</p>
+            <p>Category: {selectedField.category}</p>
+            <p>Size: {selectedField.size}</p>
+            <p>Lamp: {selectedField.lamp}</p>
+            <button onClick={handleSubmit}>Submit Reservation</button>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

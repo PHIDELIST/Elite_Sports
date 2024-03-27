@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Auth } from "aws-amplify";
-
+import { Link } from 'react-router-dom'; 
 
 function LoginPage() {  
   const schema = yup.object().shape({
@@ -45,9 +45,8 @@ function LoginPage() {
         <button type="submit">Login</button>
       </form>
       <p>
-        New here?  <a href="/signup">SignUp</a> 
+        New here?<Link className="navbar__cta" to="/signup">SignUp</Link> 
       </p>
-      <p>Can't remember your password? <a href="/reset-password">Reset Password</a></p>
     </div>
   );
 }
