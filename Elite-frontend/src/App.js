@@ -17,7 +17,7 @@ Amplify.configure({
   }
 });
 function App() {
-  const token = localStorage.getItem('userID');
+  const token = localStorage.getItem('token');
   return (
     <Router>
       <div className="App">        

@@ -120,7 +120,7 @@ const FieldsPage = () => {
           <div className="fields__header">
             <h2>Fields</h2>
           </div>
-          <div className="fields__body">
+          <div className="featured-fields__body">
             {fields.map(field => (
               <div className="featured-fields__card" key={field.id}>
                 <div className="featured-fields__card-left">
