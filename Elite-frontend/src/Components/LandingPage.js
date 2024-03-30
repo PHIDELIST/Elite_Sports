@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { addFavorite, deleteFavorite, getFavorites } from '../utils';
+import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
+import Footer from './Footer';
+import { addFavorite, deleteFavorite, getFavorites } from '../utils';
 import "../css/style.css";
 import hero1Img from '../img/heros/hero-1.png';
 import hero2Img from '../img/heros/hero-2.png';
 import hero3Img from '../img/heros/hero-3.png';
 import hero4Img from '../img/heros/hero-4.png';
-import field1Img from '../img/fields/field-1.png';
 import field2Img from '../img/fields/field-2.png';
 import how1Img from '../img/how/how-1.png';
 import how2Img from '../img/how/how-2.png';
@@ -16,23 +17,25 @@ import promotion1Img from '../img/promotions/promotion-1.png';
 import promotion2Img from '../img/promotions/promotion-2.png';
 import heartBlackIcon from '../img/icons/heart-black.png';
 import heartSolidPrimaryIcon from '../img/icons/heart-solid-primary.png';
-import location from "../img/icons/location-gray.png";
+import locationIcon from "../img/icons/location-gray.png";
 import gridGrayIcon from '../img/icons/grid-8-gray.png';
 import cropGrayIcon from '../img/icons/crop-gray.png';
 import lampGrayIcon from '../img/icons/lamp-gray.png';
 import magn from "../img/icons/magnifier.png"
-import clock from "../img/icons/clock-gray.png"
-import Footer from './Footer';
-import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
+  const [field, setField] = useState([]);
   const [featuredFieldsData, setFeaturedFieldsData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items');
         setFeaturedFieldsData(response.data);
+        setField(response.data)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -97,46 +100,63 @@ const LandingPage = () => {
 
 
   const renderFeaturedFields = () => {
-    return featuredFieldsData.map(field => (
-      <div className="featured-fields__card" key={field.id}>
-        <div className="featured-fields__card-left">
-          <img alt="" src={field2Img} className="featured-fields__card-img" />
-          <button className="featured-fields__card-favorite" data-field-id={field.id}>
-            <img alt="Favorite" src={heartBlackIcon} />
-            <img alt="Favorite" src={heartSolidPrimaryIcon} />
-          </button>
-        </div>
-        <div className="featured-fields__card-right">
-          <div className="featured-fields__card-top">
-            <p className="featured-fields__card-location">
-              <img alt="Location" src={location} />{field.location}
+    return featuredFieldsData
+      .filter(field =>
+        field && field.name &&
+        field.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (locationFilter === "" || field.location === locationFilter) &&
+        (categoryFilter === "" || field.category === categoryFilter)
+      )
+      .map(field => (
+        <div className="featured-fields__card" key={field.id}>
+          <div className="featured-fields__card-left">
+            <img alt="" src={field2Img} className="featured-fields__card-img" />
+            <button className="featured-fields__card-favorite" data-field-id={field.id}>
+              <img alt="Favorite" src={heartBlackIcon} />
+              <img alt="Favorite" src={heartSolidPrimaryIcon} />
+            </button>
+          </div>
+          <div className="featured-fields__card-right">
+            <div className="featured-fields__card-top">
+              <p className="featured-fields__card-location">
+                <img alt="Location" src={locationIcon} />{field.location}
+              </p>
+              <p className="featured-fields__card-price">{field.price}</p>
+            </div>
+            <h3 className="featured-fields__card-name">
+              <Link className="nav" to="/fields">{field.name}</Link>
+            </h3>
+            <p className="featured-fields__card-description">
+              {field.description}
             </p>
-            <p className="featured-fields__card-price">{field.price}</p>
-          </div>
-          <h3 className="featured-fields__card-name">
-            <Link className="nav" to="/fields">{field.name}</Link>
-          </h3>
-          <p className="featured-fields__card-description">
-            {field.description}
-          </p>
-          <hr />
-          <div className="featured-fields__card-feature-list">
-            <div className="featured-fields__card-feature-item">
-              <img alt="Category" src={gridGrayIcon} />
-              <span>{field.category}</span>
-            </div>
-            <div className="featured-fields__card-feature-item">
-              <img alt="Size" src={cropGrayIcon} />
-              <span>{field.size}</span>
-            </div>
-            <div className="featured-fields__card-feature-item">
-              <img alt="Lamp" src={lampGrayIcon} />
-              <span>{field.lamp}</span>
+            <hr />
+            <div className="featured-fields__card-feature-list">
+              <div className="featured-fields__card-feature-item">
+                <img alt="Category" src={gridGrayIcon} />
+                <span>{field.category}</span>
+              </div>
+              <div className="featured-fields__card-feature-item">
+                <img alt="Size" src={cropGrayIcon} />
+                <span>{field.size}</span>
+              </div>
+              <div className="featured-fields__card-feature-item">
+                <img alt="Lamp" src={lampGrayIcon} />
+                <span>{field.lamp}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    ));
+      ));
+  };
+
+  const handleLocationChange = event => {
+    setLocationFilter(event.target.value);
+  };
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+  const handleCategoryChange = event => {
+    setCategoryFilter(event.target.value);
   };
 
   return (
@@ -166,49 +186,45 @@ const LandingPage = () => {
         <form action="" className="container filter">
           <div className="filter__search">
             <label htmlFor="search">
-              <img alt="            Search" src={magn} />
+              <img alt="Search" src={magn} />
             </label>
             <input
               id="search"
               name="search"
               type="search"
               placeholder="Search for fields"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
             <button type="submit">Search</button>
           </div>
           <div className="filter__list">
             <div className="filter__item">
               <label htmlFor="location">
-                <img alt="Location" src={location} />
+                <img alt="Location" src={locationIcon} />
               </label>
-              <select id="location" name="location">
-                <option value="" disabled>Location</option>
-                <option value="location-1">Location 1</option>
-                <option value="location-2">Location 2</option>
-                <option value="location-3">Location 3</option>
+              <select id="location" name="location" value={locationFilter} onChange={handleLocationChange}>
+                <option value="">All Locations</option>
+                {field.map(field => (
+                  <option key={field.id} value={field.location}>{field.location}</option>
+                ))}
               </select>
             </div>
             <div className="filter__item">
               <label htmlFor="category">
                 <img alt="Category" src={gridGrayIcon} />
               </label>
-              <select id="category" name="category">
-                <option value="" disabled>Category</option>
-                <option value="category-1">Category 1</option>
-                <option value="category-2">Category 2</option>
-                <option value="category-3">Category 3</option>
+              <select id="category" name="category" value={categoryFilter} onChange={handleCategoryChange}>
+                <option value="">All Categories</option>
+                {field.map(field => (
+                  <option key={field.id} value={field.category}>{field.category}</option>
+                ))}
               </select>
-            </div>
-            <div className="filter__item">
-              <label htmlFor="time">
-                <img alt="Time" src={clock} />
-              </label>
-              <input id="time" name="time" type="date" />
             </div>
           </div>
         </form>
         <div className="container featured-fields">
-          <div className="featured-fields__header" >
+          <div className="featured-fields__header">
             <h2>Featured fields</h2>
             <Link className="h" to="/fields">Browse all fields</Link>
           </div>
@@ -293,4 +309,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
