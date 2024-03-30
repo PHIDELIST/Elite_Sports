@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import Footer from './Footer';
 import magn from "../img/icons/magnifier.png";
 import clock from "../img/icons/clock-gray.png";
-import Footer from './Footer';
 import heartBlackIcon from '../img/icons/heart-black.png';
 import heartSolidPrimaryIcon from '../img/icons/heart-solid-primary.png';
 import locationIcon from "../img/icons/location-gray.png";
@@ -19,6 +19,7 @@ const FieldsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,10 +36,12 @@ const FieldsPage = () => {
 
   const openFieldModal = (field) => {
     setSelectedField(field);
+    setModalOpen(true);
   };
 
   const closeFieldModal = () => {
     setSelectedField(null);
+    setModalOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -72,7 +75,6 @@ const FieldsPage = () => {
     (locationFilter === "" || field.location === locationFilter) &&
     (categoryFilter === "" || field.category === categoryFilter)
   );
-  
 
   const handleSearchChange = event => {
     setSearchQuery(event.target.value);
@@ -181,7 +183,7 @@ const FieldsPage = () => {
           </div>
         </div>
       </main>
-      {selectedField && (
+      {modalOpen && (
         <div className="modal">
           <div className="modal-content">
             <span className="close-button" onClick={closeFieldModal}>&times;</span>
