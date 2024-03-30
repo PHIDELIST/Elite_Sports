@@ -135,6 +135,10 @@ class EliteSportsBackendStack(Stack):
                                    website_index_document="index.html",
                                    removal_policy=RemovalPolicy.DESTROY)
         
+               # S3 Bucket for Website Assets
+        assets_bucket = s3.Bucket(self, "EliteSportsAssetsBucket",
+                                  removal_policy=RemovalPolicy.DESTROY)
+        
         # Allow CloudFront to access the S3 bucket
         frontend_bucket.add_to_resource_policy(iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
@@ -143,7 +147,15 @@ class EliteSportsBackendStack(Stack):
             principals=[iam.ServicePrincipal("cloudfront.amazonaws.com")],
         ))
 
-        # CloudFront Distribution
+        # Allow CloudFront to access the assets S3 bucket
+        assets_bucket.add_to_resource_policy(iam.PolicyStatement(
+            effect=iam.Effect.ALLOW,
+            actions=["s3:GetObject"],
+            resources=[assets_bucket.arn_for_objects("*")],
+            principals=[iam.ServicePrincipal("cloudfront.amazonaws.com")],
+        ))
+
+      # CloudFront Distribution
         cloudfront_distribution = cloudfront.CloudFrontWebDistribution(self, "WebsiteDistribution",
             origin_configs=[
                 cloudfront.SourceConfiguration(
@@ -152,13 +164,33 @@ class EliteSportsBackendStack(Stack):
                         origin_access_identity=cloudfront.OriginAccessIdentity(self, 'OAI')
                     ),
                     behaviors=[
-                        cloudfront.Behavior(is_default_behavior=True)
+                        cloudfront.Behavior(
+                            is_default_behavior=True,
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD
+                        )
+                    ]
+                ),
+                cloudfront.SourceConfiguration(
+                    s3_origin_source=cloudfront.S3OriginConfig(
+                        s3_bucket_source=assets_bucket,
+                        origin_access_identity=cloudfront.OriginAccessIdentity(self, 'OAIPhotos')
+                    ),
+                    behaviors=[
+                        cloudfront.Behavior(
+                            path_pattern="/photos/*",
+                            is_default_behavior=False,
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
+                            cached_methods=cloudfront.CloudFrontAllowedCachedMethods.GET_HEAD,
+                            forwarded_values={
+                                "query_string": False,
+                                "cookies": {"forward": "none"},
+                            },
+                            viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                        )
                     ]
                 )
             ]
         )
-
-       
          # Outputs
         CfnOutput(self, "WebsiteURL", value=cloudfront_distribution.distribution_domain_name)
         CfnOutput(self, "EliteSportsApiURL", value=api.url)

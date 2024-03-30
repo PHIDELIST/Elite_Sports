@@ -1,0 +1,1 @@
+aws s3 cp . s3://elitesportsbackendstack-elitesportsassetsbucket79a-awmyb9v0a9sw/img --recursive
