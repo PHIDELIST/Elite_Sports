@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
-import magn from "../img/icons/magnifier.png"
-import clock from "../img/icons/clock-gray.png"
+import magn from "../img/icons/magnifier.png";
+import clock from "../img/icons/clock-gray.png";
 import Footer from './Footer';
 import heartBlackIcon from '../img/icons/heart-black.png';
 import heartSolidPrimaryIcon from '../img/icons/heart-solid-primary.png';
-import location from "../img/icons/location-gray.png";
+import locationIcon from "../img/icons/location-gray.png";
 import gridGrayIcon from '../img/icons/grid-8-gray.png';
 import cropGrayIcon from '../img/icons/crop-gray.png';
 import lampGrayIcon from '../img/icons/lamp-gray.png';
-import field1Img from '../img/fields/field-1.png';
-import field2Img from '../img/fields/field-2.png';
 import { Link } from 'react-router-dom';
-import "../css/style.css"
+import "../css/style.css";
 
 const FieldsPage = () => {
   const [fields, setFields] = useState([]);
   const [selectedField, setSelectedField] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,21 +32,20 @@ const FieldsPage = () => {
 
     fetchData();
   }, []);
+
   const openFieldModal = (field) => {
     setSelectedField(field);
-
   };
 
   const closeFieldModal = () => {
     setSelectedField(null);
-
   };
-  
+
   const handleSubmit = async () => {
     try {
       const updatedField = { ...selectedField, reserved: true };
-      const id = selectedField.id; 
-      
+      const id = selectedField.id;
+
       const response = await axios.put(
         `https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items/${id}`,
         updatedField,
@@ -58,7 +57,7 @@ const FieldsPage = () => {
           }
         }
       );
-      
+
       alert('Reservation submitted successfully!');
       closeFieldModal(); // Close modal after successful submission
     } catch (error) {
@@ -66,7 +65,27 @@ const FieldsPage = () => {
       alert('Failed to submit reservation. Please try again later.');
     }
   };
+
+  const filteredFields = fields.filter(field =>
+    field && field.name &&
+    field.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    (locationFilter === "" || field.location === locationFilter) &&
+    (categoryFilter === "" || field.category === categoryFilter)
+  );
   
+
+  const handleSearchChange = event => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleLocationChange = event => {
+    setLocationFilter(event.target.value);
+  };
+
+  const handleCategoryChange = event => {
+    setCategoryFilter(event.target.value);
+  };
+
   return (
     <div>
       <Navbar />
@@ -81,37 +100,33 @@ const FieldsPage = () => {
               name="search"
               type="search"
               placeholder="Search for fields"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
             <button type="submit">Search</button>
           </div>
           <div className="filter__list">
             <div className="filter__item">
               <label htmlFor="location">
-                <img alt="Location" src={location} />
+                <img alt="Location" src={locationIcon} />
               </label>
-              <select id="location" name="location">
-                <option value="" disabled>Location</option>
-                <option value="location-1">Location 1</option>
-                <option value="location-2">Location 2</option>
-                <option value="location-3">Location 3</option>
+              <select id="location" name="location" value={locationFilter} onChange={handleLocationChange}>
+                <option value="">All Locations</option>
+                {fields.map(field => (
+                  <option key={field.id} value={field.location}>{field.location}</option>
+                ))}
               </select>
             </div>
             <div className="filter__item">
               <label htmlFor="category">
                 <img alt="Category" src={gridGrayIcon} />
               </label>
-              <select id="category" name="category">
-                <option value="" disabled>Category</option>
-                <option value="category-1">Category 1</option>
-                <option value="category-2">Category 2</option>
-                <option value="category-3">Category 3</option>
+              <select id="category" name="category" value={categoryFilter} onChange={handleCategoryChange}>
+                <option value="">All Categories</option>
+                {fields.map(field => (
+                  <option key={field.id} value={field.category}>{field.category}</option>
+                ))}
               </select>
-            </div>
-            <div className="filter__item">
-              <label htmlFor="time">
-                <img alt="Time" src={clock} />
-              </label>
-              <input id="time" name="time" type="date" />
             </div>
           </div>
         </form>
@@ -121,10 +136,10 @@ const FieldsPage = () => {
             <h2>Fields</h2>
           </div>
           <div className="featured-fields__body">
-            {fields.map(field => (
+            {filteredFields.map(field => (
               <div className="featured-fields__card" key={field.id}>
                 <div className="featured-fields__card-left">
-                  <img alt="" src={field2Img} className="featured-fields__card-img" />
+                  <img alt="" src={field.image} className="featured-fields__card-img" />
                   <Link className="nav" to="/fields"></Link>
                   <button className="featured-fields__card-favorite" data-field-id={field.id}>
                     <img alt="Favorite" src={heartBlackIcon} />
@@ -135,7 +150,7 @@ const FieldsPage = () => {
                 <div className="featured-fields__card-right">
                   <div className="featured-fields__card-top">
                     <p className="featured-fields__card-location">
-                      <img alt="Location" src={location} />{field.location}
+                      <img alt="Location" src={locationIcon} />{field.location}
                     </p>
                     <p className="featured-fields__card-price">{field.price}</p>
                   </div>
@@ -159,10 +174,8 @@ const FieldsPage = () => {
                       <img alt="Lamp" src={lampGrayIcon} />
                       <span>{field.lamp}</span>
                     </div>
-
                   </div>
                 </div>
-
               </div>
             ))}
           </div>
@@ -183,7 +196,6 @@ const FieldsPage = () => {
           </div>
         </div>
       )}
-
       <Footer />
     </div>
   );
