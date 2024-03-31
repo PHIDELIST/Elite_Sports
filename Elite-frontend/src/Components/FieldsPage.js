@@ -47,8 +47,7 @@ const FieldsPage = () => {
   const handleSubmit = async () => {
     try {
       const updatedField = { ...selectedField, reserved: true };
-      const id = selectedField.id;
-
+      const id = selectedField.userId;
       const response = await axios.put(
         `https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items/${id}`,
         updatedField,
@@ -62,7 +61,7 @@ const FieldsPage = () => {
       );
 
       alert('Reservation submitted successfully!');
-      closeFieldModal(); // Close modal after successful submission
+      closeFieldModal(); 
     } catch (error) {
       console.error('Error submitting reservation:', error);
       alert('Failed to submit reservation. Please try again later.');
