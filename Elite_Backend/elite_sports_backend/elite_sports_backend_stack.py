@@ -25,7 +25,7 @@ class EliteSportsBackendStack(Stack):
             partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING),
             removal_policy=RemovalPolicy.DESTROY)
         
-        # Add a Global Secondary Index on userId to facilitate querying by userId
+        # Global Secondary Index on userId to facilitate querying by userId
         table.add_global_secondary_index(
             index_name="UserIdIndex",
             partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING)
@@ -59,7 +59,7 @@ class EliteSportsBackendStack(Stack):
                                               code=_lambda.Code.from_asset("lambda/post_signup"))
 
 
-                # Define IAM policy statement for DynamoDB access
+        # IAM policy statement for DynamoDB access
         dynamodb_policy_statement = iam.PolicyStatement(
             effect=iam.Effect.ALLOW,
             actions=[
@@ -72,7 +72,7 @@ class EliteSportsBackendStack(Stack):
             resources=["*"]  
         )
 
-        # Attach IAM policy to each Lambda function's execution role
+        # IAM policy to each Lambda function
         create_lambda.role.add_to_policy(dynamodb_policy_statement)
         read_lambda.role.add_to_policy(dynamodb_policy_statement)
         update_lambda.role.add_to_policy(dynamodb_policy_statement)
@@ -122,7 +122,7 @@ class EliteSportsBackendStack(Stack):
         update_integration = apigw.LambdaIntegration(update_lambda)
         delete_integration = apigw.LambdaIntegration(delete_lambda)
 
-        
+        #Adding methods to apigw for lambda functions
         items_resource.add_method("POST", create_integration)
         items_resource.add_method("GET", read_integration)
         single_item_resource.add_method("PUT", update_integration)
@@ -133,7 +133,7 @@ class EliteSportsBackendStack(Stack):
                                    website_index_document="index.html",
                                    removal_policy=RemovalPolicy.DESTROY)
         
-               # S3 Bucket for Website Assets
+        # S3 Bucket for Website Assets
         assets_bucket = s3.Bucket(self, "EliteSportsAssetsBucket",
                                   removal_policy=RemovalPolicy.DESTROY)
         
