@@ -24,7 +24,13 @@ const FieldsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items');
+        const token = localStorage.getItem('token');
+
+        const headers = {
+          'Authorization': `Bearer ${token}`
+        };
+        const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items',
+        { headers });
         setFields(response.data);
       } catch (error) {
         console.error('Error fetching fields:', error);
@@ -48,11 +54,13 @@ const FieldsPage = () => {
     try {
       const updatedField = { ...selectedField, reserved: true };
       const id = selectedField.userId;
+      const token = localStorage.getItem('token');
       const response = await axios.put(
         `https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items/${id}`,
         updatedField,
         {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'

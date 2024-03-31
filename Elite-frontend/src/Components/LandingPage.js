@@ -33,7 +33,12 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items');
+        const token = localStorage.getItem('token');
+
+        const headers = {
+          'Authorization': `Bearer ${token}`
+        };
+        const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items',{headers});
         setFeaturedFieldsData(response.data);
         setField(response.data)
       } catch (error) {
