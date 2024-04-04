@@ -21,7 +21,7 @@ function LoginPage() {
     try {
       const user = await Auth.signIn(email, password);
 
-      const token = user.signInUserSession.accessToken.jwtToken;
+      const token = user.signInUserSession.idToken.jwtToken;
       const userID = user.username;
       const name = user.signInUserSession.idToken.payload.name;  
       localStorage.setItem('token', token);

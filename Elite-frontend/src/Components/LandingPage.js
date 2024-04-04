@@ -9,7 +9,7 @@ import hero1Img from '../img/heros/hero-1.png';
 import hero2Img from '../img/heros/hero-2.png';
 import hero3Img from '../img/heros/hero-3.png';
 import hero4Img from '../img/heros/hero-4.png';
-import field2Img from '../img/fields/field-2.png';
+import field2Img from '../img/fields/field9.png';
 import how1Img from '../img/how/how-1.png';
 import how2Img from '../img/how/how-2.png';
 import how3Img from '../img/how/how-3.png';
@@ -36,7 +36,7 @@ const LandingPage = () => {
         const token = localStorage.getItem('token');
 
         const headers = {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `${token}`
         };
         const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items',{headers});
         setFeaturedFieldsData(response.data);

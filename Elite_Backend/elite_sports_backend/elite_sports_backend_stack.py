@@ -114,7 +114,10 @@ class EliteSportsBackendStack(Stack):
             fn= post_confirmation_lambda
         )
 
-
+                # Cognito API Gateway Authorizer
+        authorizer = apigw.CognitoUserPoolsAuthorizer(self, "EliteSportsAuthorizer",
+                                                      cognito_user_pools=[user_pool],
+                                                      )
 
         # Integration for Lambda Functions
         create_integration = apigw.LambdaIntegration(create_lambda)
@@ -123,10 +126,10 @@ class EliteSportsBackendStack(Stack):
         delete_integration = apigw.LambdaIntegration(delete_lambda)
 
         #Adding methods to apigw for lambda functions
-        items_resource.add_method("POST", create_integration)
-        items_resource.add_method("GET", read_integration)
-        single_item_resource.add_method("PUT", update_integration)
-        single_item_resource.add_method("DELETE", delete_integration)
+        items_resource.add_method("POST", create_integration,api_key_required=False,authorizer=authorizer)
+        items_resource.add_method("GET", read_integration,api_key_required=False,authorizer=authorizer)
+        single_item_resource.add_method("PUT", update_integration,api_key_required=False,authorizer=authorizer)
+        single_item_resource.add_method("DELETE", delete_integration,api_key_required=False,authorizer=authorizer)
          
         # S3 Bucket for Website Hosting
         frontend_bucket = s3.Bucket(self, "EliteSportsWebsiteBucket254",

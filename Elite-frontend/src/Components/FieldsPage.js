@@ -11,7 +11,7 @@ import gridGrayIcon from '../img/icons/grid-8-gray.png';
 import cropGrayIcon from '../img/icons/crop-gray.png';
 import lampGrayIcon from '../img/icons/lamp-gray.png';
 import { Link } from 'react-router-dom';
-import field2Img from '../img/fields/field-2.png';
+import field2Img from '../img/fields/field9.png';
 import "../css/style.css";
 
 const FieldsPage = () => {
@@ -28,7 +28,7 @@ const FieldsPage = () => {
         const token = localStorage.getItem('token');
 
         const headers = {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `${token}`
         };
         const response = await axios.get('https://mrndvidzee.execute-api.us-east-1.amazonaws.com/prod/items',
         { headers });
@@ -61,7 +61,7 @@ const FieldsPage = () => {
         updatedField,
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `${token}`,
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
@@ -149,7 +149,7 @@ const FieldsPage = () => {
             {filteredFields.map(field => (
               <div className="featured-fields__card" key={field.id}>
                 <div className="featured-fields__card-left">
-                  <img alt="" src={field2Img} className="featured-fields__card-img" />
+                  <img alt="" src={field.imgSrc} className="featured-fields__card-img" />
                   <Link className="nav" to="/fields"></Link>
                   <button className="featured-fields__card-favorite" data-field-id={field.id}>
                     <img alt="Favorite" src={heartBlackIcon} />
