@@ -25,7 +25,7 @@ class EliteSportsBackendStack(Stack):
             partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING),
             removal_policy=RemovalPolicy.DESTROY)
         
-        # Global Secondary Index on userId to facilitate querying by userId
+        # Global Secondary Index to facilitate querying by userId
         table.add_global_secondary_index(
             index_name="UserIdIndex",
             partition_key=dynamodb.Attribute(name="userId", type=dynamodb.AttributeType.STRING)
