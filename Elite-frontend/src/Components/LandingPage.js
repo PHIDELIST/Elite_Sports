@@ -115,7 +115,7 @@ const LandingPage = () => {
       .map(field => (
         <div className="featured-fields__card" key={field.id}>
           <div className="featured-fields__card-left">
-            <img alt="" src={field2Img} className="featured-fields__card-img" />
+            <img alt="" src={field.imgSrc} className="featured-fields__card-img" />
             <button className="featured-fields__card-favorite" data-field-id={field.id}>
               <img alt="Favorite" src={heartBlackIcon} />
               <img alt="Favorite" src={heartSolidPrimaryIcon} />
