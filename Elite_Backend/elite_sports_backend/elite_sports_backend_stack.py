@@ -52,7 +52,6 @@ class EliteSportsBackendStack(Stack):
                                          handler="delete.handler",
                                          code=_lambda.Code.from_asset("lambda/delete"))
         
-        # Lambda Function for Cognito Post Confirmation Trigger
         post_confirmation_lambda = _lambda.Function(self, "PostConfirmationLambda",
                                               runtime=_lambda.Runtime.PYTHON_3_8,
                                               handler="post_confirmation_lambda.handler",
@@ -114,7 +113,7 @@ class EliteSportsBackendStack(Stack):
             fn= post_confirmation_lambda
         )
 
-                # Cognito API Gateway Authorizer
+        # Cognito API Gateway Authorizer
         authorizer = apigw.CognitoUserPoolsAuthorizer(self, "EliteSportsAuthorizer",
                                                       cognito_user_pools=[user_pool],
                                                       )
@@ -181,7 +180,7 @@ class EliteSportsBackendStack(Stack):
             ]
         )
 
-        # Photos CloudFront Distribution
+        # Assets CloudFront Distribution
         photos_distribution = cloudfront.CloudFrontWebDistribution(self, "PhotosDistribution",
             origin_configs=[
                 cloudfront.SourceConfiguration(
